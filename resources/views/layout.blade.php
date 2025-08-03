@@ -4,24 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- SEO -->
-    {{-- <meta name="description" content="{{ $meta_desc }}">
-    <meta name="keywords" content="{{$meta_keywords}}">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{{ $url_canonical }}"> --}}
     <meta name="author" content="Tuyet Nhu">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/path/to/favicon.ico">
-    {{-- <title>{{ $meta_title }}</title> --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('fontend/images/logo.png') }}">
 
     <title>NQ fashion</title>
 
-    {{-- <meta property="og:site_name" content="http://127.0.0.1:8000/home">
-    <meta property="og:description" content="{{ $meta_desc }}">
-    <meta property="og:title" content="{{ $meta_title }}">
-    <meta property="og:url" content="{{ $url_canonical }}">
-    <meta property="og:type" content="website"> --}}
 
     <!-- Bootstrap 5.3 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -29,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('fontend/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('fontend/css/sweetalert.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
 </head>
 
 <body>
@@ -39,7 +28,7 @@
 
     <div class="top-bar">
         <div class="marquee">
-            {{-- @foreach ($coupon as $value)
+            @foreach ($coupon as $value)
                 @if ($value->discount_type == 'fixed')
                     <span>
                         VOUCHER {{ number_format($value->discount_value, 0, ',', '.') }}₫ — ĐƠN TỪ
@@ -51,8 +40,7 @@
                         {{ number_format($value->min_order_value, 0, ',', '.') }}₫
                     </span>
                 @endif
-            @endforeach --}}
-
+            @endforeach
         </div>
     </div>
 
@@ -60,7 +48,8 @@
     <nav class="header-main">
         <div class="container d-flex align-items-center justify-content-between">
             <!-- Logo -->
-            <a href="{{ URL::to('/home') }}"><img src="logo.png" alt="Logo" height="40"></a>
+            <a href="{{ URL::to('/home') }}"><img src="{{ asset('fontend/images/logo.png') }}" alt="Logo" height="60" width="100"
+                    style="margin-right:20px;"></a>
 
             <!-- Thanh tìm kiếm -->
             <form class="search-box d-flex" action="{{ URL::to('/home/search') }}" method="post">
@@ -98,6 +87,7 @@
                     });
                 </script>
             @endif
+
             <!-- Biểu tượng cửa hàng, đăng nhập, giỏ hàng -->
             <div class="header-icons d-flex align-items-center">
                 <div class="dropdown">
@@ -126,11 +116,13 @@
                         <ul class="dropdown-menu account-dropdown" aria-labelledby="userDropdown">
                             <li class="dropdown-header text-center">
                                 <strong>THÔNG TIN TÀI KHOẢN</strong>
-                                <div class="small mt-1">Số điện thoại: <strong>{{ session('customer_phone') }}</strong>
+                                <div class="small mt-1">Số điện thoại:
+                                    <strong>{{ session('customer_phone') }}</strong>
                                 </div>
                             </li>
                             <li class="dropdown-actions d-flex justify-content-around mt-3 px-3">
-                                <a href="{{ URL::to('/home/account/info/profile') }}" class="btn btn-dark w-45">Xem chi
+                                <a href="{{ URL::to('/home/account/info/profile') }}" class="btn btn-dark w-45">Xem
+                                    chi
                                     tiết</a>
                                 <a href="{{ URL::to('/home/logout') }}" class="btn btn-dark w-45">Đăng xuất</a>
                             </li>
@@ -304,9 +296,9 @@
             <div class="row text-center text-md-start">
                 <div class="col-md-3 mb-3">
                     <h6 class="fw-bold">🛍 NQ Fashion Store</h5>
-                    <p>Thời trang phong cách, trẻ trung và đẳng cấp.</p>
-                    <p><i class="bi bi-envelope"></i> naruto25864@gmail.com</p>
-                    <p><i class="bi bi-phone"></i> 0398 098 795</p>
+                        <p>Thời trang phong cách, trẻ trung và đẳng cấp.</p>
+                        <p><i class="bi bi-envelope"></i> naruto25864@gmail.com</p>
+                        <p><i class="bi bi-phone"></i> 0398 098 795</p>
                 </div>
 
                 <div class="col-md-3 mb-3">
@@ -318,8 +310,8 @@
 
                 <div class="col-md-3 mb-3">
                     <h6 class="fw-semibold">Thanh toán</h6>
-                    <img src="/images/vnpay.png" width="40" class="me-2">
-                    <img src="/images/cod.png" width="40">
+                    <img src="https://cdn.brandfetch.io/idV02t6WJs/w/820/h/249/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1750645747861" width="90" class="me-2">
+                    <img src="https://cdn.brandfetch.io/idQhfAEHMK/w/432/h/175/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1745929332351" width="90">
                 </div>
 
                 <div class="col-md-3 mb-3">

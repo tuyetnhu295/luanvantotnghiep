@@ -8,7 +8,7 @@
             <div class="mb-3">
                 <label for="admin_name" class="form-label">Tên nhân viên</label>
                 <input type="text" value="{{ $admin->admin_name }}" name="admin_name" class="form-control" id="admin_name"
-                    placeholder="Tên danh mục" required>
+                    placeholder="Tên nhân viên" required>
             </div>
 
             <div class="mb-3">

@@ -10,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
     @yield('head')
     <style>
         body {
@@ -599,18 +599,18 @@
     <div class="profile">
         <div class="dropdown">
             <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown"
-                aria-expanded="false">
+                aria-expanded="false" style="margin:auto;">
 
                 @php
                     $name = Session::get('admin_name');
+                    $id=Session::get('admin_id');
                 @endphp
-                <img src="" class="avatar" alt="Avatar" />
-                {{ $name ?? 'Chưa có tên' }}
+                👤{{ $name ?? 'Chưa có tên' }}
             </button>
 
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" href="{{ url('/admin/info') }}">👤 Thông tin cá nhân</a></li>
+                <li><a class="dropdown-item" href="{{ url('/admin/info' ) }}"><i class="fi fi-ss-user"></i> Thông tin cá nhân</a></li>
                 <li><a class="dropdown-item text-danger" href="{{ URL::to('/admin/logout') }}">🚪 Đăng xuất</a></li>
             </ul>
         </div>

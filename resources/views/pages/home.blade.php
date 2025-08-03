@@ -1,5 +1,30 @@
 @extends('layout')
 @section('content')
+    @if (Session::has('message') || Session::has('error'))
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055">
+            <div class="toast align-items-center text-white {{ Session::has('message') ? 'bg-success' : 'bg-danger' }} border-0 shadow"
+                role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ Session::get('message') ?? Session::get('error') }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const toastEl = document.querySelector('.toast');
+                if (toastEl) {
+                    const toast = new bootstrap.Toast(toastEl, {
+                        delay: 5000
+                    });
+                    toast.show();
+                }
+            });
+        </script>
+    @endif
     <!-- Carousel -->
     <div class="carousel-container mt-2">
         <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -105,7 +130,7 @@
                                                 style="height: 220px; object-fit: cover;">
 
                                             <div class="button-overlay d-flex gap-2">
-                                                <form action="" method="POST">
+                                                <form action="{{ url('/home/products/favorite/' . $product->slug_product) }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="product_id"
                                                         value="{{ $product->slug_product }}">
@@ -173,7 +198,7 @@
                                                 style="height: 220px; object-fit: cover;">
 
                                             <div class="button-overlay d-flex gap-2">
-                                                <form action="" method="POST">
+                                                <form action="{{ url('/home/products/favorite/' . $product->slug_product) }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="product_id"
                                                         value="{{ $product->slug_product }}">
@@ -256,7 +281,7 @@
                                                     style="height: 220px; object-fit: cover;">
 
                                                 <div class="button-overlay d-flex gap-2">
-                                                    <form action="" method="POST">
+                                                    <form action="{{ url('/home/products/favorite/' . $product->slug_product) }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="product_id"
                                                             value="{{ $product->slug_product }}">

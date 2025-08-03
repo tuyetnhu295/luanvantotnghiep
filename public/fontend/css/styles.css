@@ -13,22 +13,24 @@ body {
 
 .marquee {
     display: inline-block;
+    padding-left: 80%;
     white-space: nowrap;
-    animation: marqueeScroll 15s linear infinite;
+    animation: marqueeScroll 20s linear infinite;
 }
 
 .marquee span {
     display: inline-block;
     padding: 0 30px;
     font-size: 14px;
+
 }
 
 @keyframes marqueeScroll {
-    from {
+    0% {
         transform: translateX(100%);
     }
 
-    to {
+    100% {
         transform: translateX(-100%);
     }
 }
@@ -36,6 +38,7 @@ body {
 .header-main {
     background: black;
     padding: 10px 0;
+    overflow: hidden;
 }
 
 .search-box {
@@ -46,14 +49,16 @@ body {
 .search-box input.form-control {
     height: 40px;
     box-shadow: none;
+
 }
 
 .search-box button.btn {
     height: 40px;
-    background-color: #21252900;
     /* Màu đen */
     color: #fff;
     transition: background-color 0.3s ease;
+    border-radius: 20px;
+    width: 80px;
 }
 
 .search-box button.btn:hover {
@@ -534,16 +539,17 @@ input[type="number"] {
     background-color: black;
     color: white;
 }
-.button-color.active
-{
+
+.button-color.active {
     background-color: #000;
     color: white;
 }
-.button-size.active
-{
+
+.button-size.active {
     background-color: #000;
     color: white;
 }
+
 .button-color {
     width: 90px;
     height: 40px;

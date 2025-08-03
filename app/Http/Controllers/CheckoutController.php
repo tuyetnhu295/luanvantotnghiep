@@ -68,7 +68,7 @@ class CheckoutController extends Controller
         Session::put('shipping_ward', $request->shipping_ward);
         Session::put('shipping_note', $request->shipping_note);
         Session::put('shipping_method', $request->shipping_method);
-
+        Session::put('total', $request->total);
         return Redirect::to('/home/payment');
     }
 
@@ -103,7 +103,6 @@ class CheckoutController extends Controller
         if (Session::has('cart_coupon') && Session::get('cart_coupon') === $couponCode) {
             return redirect()->back()->with('error_coupon', 'Mã giảm giá này đã được áp dụng.');
         }
-
         if ($coupon->end_date < now() && $coupon->end_date) {
             return redirect()->back()->with('error_coupon', 'Mã giảm giá này quá hạn sử dụng.');
         }
@@ -199,32 +198,32 @@ class CheckoutController extends Controller
             $code                    = Str::random(11);
             $coupon                  = Session::get('coupon');
             $shipping_method         = Session::get('shipping_method');
-            $city_code               = Session::get('shipping_city');
-            $district_code           = Session::get('shipping_district');
-            $subtotal                = $request->subtotal;
-            $free_shipping_threshold = 500000;
+            // $city_code               = Session::get('shipping_city');
+            // $district_code           = Session::get('shipping_district');
+            // $subtotal                = $request->subtotal;
+            // $free_shipping_threshold = 500000;
 
-            $inner_districts = ['001', '004', '007', '009'];
-            $is_inner        = ($city_code == '79' && in_array($district_code, $inner_districts));
+            // $inner_districts = ['001', '004', '007', '009'];
+            // $is_inner        = ($city_code == '79' && in_array($district_code, $inner_districts));
 
-            if ($subtotal >= $free_shipping_threshold) {
-                if ($shipping_method === 'internal') {
-                    $shipping_fee    = 0;
-                    $shipping_method = 'free';
-                } elseif ($shipping_method === 'fast') {
-                    $shipping_fee = $is_inner ? 15000 : 25000; // chỉ phí phụ
-                } else {
-                    $shipping_fee = 0;
-                }
-            } else {
-                if ($shipping_method === 'internal') {
-                    $shipping_fee = $is_inner ? 15000 : 25000;
-                } elseif ($shipping_method === 'fast') {
-                    $shipping_fee = $is_inner ? 65000 : 75000;
-                } else {
-                    $shipping_fee = 0;
-                }
-            }
+            // if ($subtotal >= $free_shipping_threshold) {
+            //     if ($shipping_method === 'internal') {
+            //         $shipping_fee    = 0;
+            //         $shipping_method = 'free';
+            //     } elseif ($shipping_method === 'fast') {
+            //         $shipping_fee = $is_inner ? 15000 : 25000; // chỉ phí phụ
+            //     } else {
+            //         $shipping_fee = 0;
+            //     }
+            // } else {
+            //     if ($shipping_method === 'internal') {
+            //         $shipping_fee = $is_inner ? 15000 : 25000;
+            //     } elseif ($shipping_method === 'fast') {
+            //         $shipping_fee = $is_inner ? 65000 : 75000;
+            //     } else {
+            //         $shipping_fee = 0;
+            //     }
+            // }
 
             $order_data                      = [];
             $order_data['customer_id']       = Session::get('customer_id');

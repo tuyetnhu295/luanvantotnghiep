@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Carbon\Carbon;
+
 // session_start();
 
 class HomeController extends Controller
@@ -52,7 +53,7 @@ class HomeController extends Controller
 
         $products = Product::orderBy('total_sold', 'desc')->limit(6)->get();
 
-        $now=Carbon::now();
+        $now          = Carbon::now();
         $products_new = DB::table('tbl_product')
             ->where('product_status', '0')
             ->whereMonth('created_at', '6')
@@ -245,7 +246,7 @@ class HomeController extends Controller
         $brand_product   = DB::table('tbl_brand_product')->where('brand_product_status', '0')->orderBy('brand_product_id', 'desc')->get();
         $subcate_product = DB::table('tbl_subcategory_product')->where('subcategory_product_status', '0')->orderBy('subcategory_product_id', 'desc')->get();
 
-        $now=Carbon::now();
+        $now         = Carbon::now();
         $all_product = DB::table('tbl_product')
             ->where('product_status', '0')
             ->whereMonth('created_at', '6')
@@ -263,8 +264,8 @@ class HomeController extends Controller
         $cate_product    = DB::table('tbl_category_product')->where('category_product_status', '0')->orderBy('category_product_id', 'desc')->get();
         $brand_product   = DB::table('tbl_brand_product')->where('brand_product_status', '0')->orderBy('brand_product_id', 'desc')->get();
         $subcate_product = DB::table('tbl_subcategory_product')->where('subcategory_product_status', '0')->orderBy('subcategory_product_id', 'desc')->get();
-        $now=Carbon::now();
-        $product = DB::table('tbl_product')
+        $now             = Carbon::now();
+        $product         = DB::table('tbl_product')
             ->join('tbl_brand_product', 'tbl_brand_product.brand_product_id', '=', 'tbl_product.brand_product_id')
             ->join('tbl_subcategory_product', 'tbl_subcategory_product.subcategory_product_id', '=', 'tbl_product.subcategory_product_id')
             ->leftJoin('tbl_product_variants', 'tbl_product_variants.product_id', '=', 'tbl_product.product_id')
@@ -315,5 +316,36 @@ class HomeController extends Controller
             ->with('brand', $brand_product)
             ->with('subcategory', $subcate_product)
             ->with('all_product', $all_product);
+    }
+    public function favorite($product)
+    {
+
+        $customer_id = Session::get('customer_id');
+
+        if (! $customer_id) {
+            return Redirect()->back()->with('error', 'Yêu cầu đăng nhập tài khoản');
+        }
+
+        $products = Product::where('slug_product', $product)->first();
+        if (! $products) {
+            return Redirect()->back()->with('error', 'Sản phẩm không tồn tại');
+        }
+
+        $tontai = DB::table('tbl_favorite_products')
+            ->where('customer_id', $customer_id)
+            ->where('product_id', $products->product_id)
+            ->first();
+
+        if ($tontai) {
+            DB::table('tbl_favorite_products')->where('favorite_product_id', $tontai->favorite_product_id)->delete();
+            return Redirect()->back()->with('error', 'Đã bỏ yêu thích');
+        }
+
+        $data                = [];
+        $data['customer_id'] = $customer_id;
+        $data['product_id']  = $products->product_id;
+        DB::table('tbl_favorite_products')->insert($data);
+
+        return Redirect()->back()->with('message', 'Yêu thích thành công');
     }
 }

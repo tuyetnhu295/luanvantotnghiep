@@ -256,10 +256,11 @@
                 <!-- Tạm tính -->
                 @php
                     $subtotal = Cart::subtotal(0, ',', '');
+                    $count = Cart::count();
                     $subtotal = (float) str_replace(',', '', $subtotal);
                     $coupon = Session::get('coupon');
                     $total_coupon = 0;
-
+                    $total_discount = 0;
                     if (is_array($coupon) && isset($coupon['discount_type'], $coupon['discount'])) {
                         if ($coupon['discount_type'] == 'percentage') {
                             $total_coupon = ($subtotal * $coupon['discount']) / 100;
@@ -267,8 +268,10 @@
                             $total_coupon = $coupon['discount'];
                         }
                     }
-
-                    $total = $subtotal - $total_coupon;
+                    if ($count > 5) {
+                        $total_discount = $subtotal * 0.1;
+                    }
+                    $total = $subtotal - $total_discount - $total_coupon;
                 @endphp
 
 
@@ -306,6 +309,7 @@
                     <p><strong>Tổng cộng: <span
                                 style="font-size: 18px; color: red;">{{ number_format($total, 0, ',', '.') }}₫</span></strong>
                     </p>
+                    <input type="hidden" name="total" value="{{ $total }}"">
                 </div>
             </div>
 

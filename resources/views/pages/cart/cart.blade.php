@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-    <div class="container cart-container mt-4" >
+    <div class="container cart-container mt-4">
         <div class="row">
             <!-- Giỏ hàng -->
             <div class="col-lg-8 mb-4" style="background-color: white;">
@@ -95,22 +95,29 @@
             <!-- Thông tin đơn hàng -->
             <div class="col-lg-4">
                 <h5>Thông tin đơn hàng</h5>
+                @php
+                    $subtotal = Cart::subtotal(0, ',', '');
+                    $count = Cart::count();
+                    $subtotal = (float) str_replace(',', '', $subtotal);;
+                    $total_discount = 0;
+
+                    if ($count > 5) {
+                        $total_discount = $subtotal * 0.1;
+                    }
+                    $total = $subtotal-$total_discount;
+                @endphp
                 <ul class="list-group mb-3">
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Tạm tính</span>
-                        <strong>{{ Cart::subtotal() . '' . '₫' }}</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Thuế</span>
-                        <strong>{{ Cart::tax() . '' . '₫' }}</strong>
+                        <strong>{{ number_format($subtotal, 0, ',', '.') }}₫</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Giảm giá</span>
-                        <strong>0₫</strong>
+                        <strong>{{ number_format($total_discount, 0, ',', '.') }}₫</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Tổng tiền</span>
-                        <strong>{{ Cart::total() . '' . '₫' }}</strong>
+                        <strong>{{ number_format($total, 0, ',', '.') }}₫</strong>
                     </li>
                 </ul>
 

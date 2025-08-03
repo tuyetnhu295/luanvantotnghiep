@@ -117,7 +117,7 @@
             {{ session('error') }}
         </div>
     @endif
-     @if (session('success'))
+    @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
@@ -142,7 +142,7 @@
                     </div>
                     <?php $subtotal = $v_content->price * $v_content->qty; ?>
                     <div class="item-price">
-                        {{ number_format($subtotal * 1.1, 0, ',', '.') }}₫
+                        {{ number_format($subtotal, 0, ',', '.') }}₫
                     </div>
                 </div>
             @endforeach
@@ -178,6 +178,8 @@
                     $subtotal = Cart::subtotal(0, ',', '');
                     $subtotal = (float) str_replace(',', '', $subtotal);
                     $coupon = Session::get('cart_coupon');
+                    $count = Cart::count();
+                    $total_discount = 0;
                     $total_coupon = 0;
 
                     if (is_array($coupon) && isset($coupon['discount_type'], $coupon['discount'])) {
@@ -187,14 +189,20 @@
                             $total_coupon = $coupon['discount'];
                         }
                     }
-
-                    $total = $subtotal - $total_coupon;
+                    if ($count > 5) {
+                        $total_discount = $subtotal * 0.1;
+                    }
+                    $total = $subtotal - $total_discount - $total_coupon;
                 @endphp
 
                 <div class="d-flex justify-content-between">
                     <span>Tạm tính</span>
                     <strong>{{ number_format($subtotal, 0, ',', '.') }}₫</strong>
                     <input type="hidden" name="subtotal" value="{{ $subtotal }}">
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Giảm giá theo số lượng mua:</span>
+                    <strong>{{ number_format($total_discount, 0, ',', '.') }}₫</strong>
                 </div>
                 <div class="d-flex justify-content-between">
                     <span>Giảm giá:</span>
@@ -246,11 +254,10 @@
                     <span>Tổng cộng</span>
                     <?php
                     $cartTotal = (float) str_replace(',', '', $total);
-                    
                     $tong = $cartTotal + $shipping_fee;
                     ?>
-                    <strong class="text-danger">{{ number_format($tong * 1.1, 0, ',', '.') }}₫</strong>
-                    <input type="hidden" name="total" value="{{ $tong * 1.1 }}">
+                    <strong class="text-danger">{{ number_format($tong, 0, ',', '.') }}₫</strong>
+                    <input type="hidden" name="total" value="{{ $tong }}">
                 </div>
             </div>
 

@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Variant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -70,20 +69,19 @@ class AdminController extends Controller
     }
     public function forget_password_email(Request $request)
     {
-        $email=$request->admin_email;
+        $email = $request->admin_email;
 
-         $admin = Admin::where('admin_email', $email)->first();
+        $admin = Admin::where('admin_email', $email)->first();
 
-        if(!$admin)
-        {
+        if (! $admin) {
             abort(404, 'Không tìm thấy tài khoản email này');
         }
-        $pass  = 'NQfashion@' . strtoupper(Str::random(3));
+        $pass = 'NQfashion@' . strtoupper(Str::random(3));
 
-        $admin=Admin::where('admin_email',$email)->update([
-            'admin_password'=>$pass,
+        $admin = Admin::where('admin_email', $email)->update([
+            'admin_password' => $pass,
         ]);
-        $link = url("/admin/login");
+        $link           = url("/admin/login");
         $messageContent = <<<EOT
             Đây là mật khẩu mới của bạn để truy cập trong hệ thống quản lý cửa hàng NQ fashion.
             Tài khoản:{$email}
@@ -135,7 +133,7 @@ class AdminController extends Controller
         $this->AuthLogin();
         $admin_email    = $request->admin_email;
         $admin_password = $request->admin_password;
-        $result = DB::table('tbl_admin')
+        $result         = DB::table('tbl_admin')
             ->where('admin_email', $admin_email)
             ->where('admin_password', $admin_password)
             ->where('status', 0)->first();
@@ -258,6 +256,43 @@ class AdminController extends Controller
 
     public function info()
     {
-        return view('admin.info');
+        $this->AuthLogin();
+        $admin_id=Session::get('admin_id');
+        // dd($admin_id);
+        $admin=Admin::where('admin_id',$admin_id)->first();
+        // dd($admin);
+        return view('admin.info')->with('admin',$admin);
+    }
+    public function save($id,Request $request)
+    {
+        $request->validate([
+            'name' => [
+            'required',
+            'string',
+            'max:100',
+            'regex:/^[a-zA-ZÀ-ỹ\s]+$/u'
+        ],
+            'email' => 'required|email|max:150',
+            'phone'=>'required|digits_between:10,11',
+        ],[
+            'name.required'  => 'Vui lòng nhập tên nhân viên',
+            'email.required' => 'Vui lòng nhập email',
+            'email.email'    => 'Email không hợp lệ',
+            'phone.required' => 'Vui lòng nhập số điện thoại',
+            'phone.digits_between' => 'Số điện thoại phải từ 10 đến 11 chữ số',
+        ]);
+        $admin=Admin::where('admin_id',$id)
+        ->update([
+            'admin_name'=>$request->name,
+            'admin_email'=>$request->email,
+            'admin_phone'=>$request->phone,
+        ]);
+
+        if(!$admin)
+        {
+            return redirect()->back()->with('error','Cập nhật thông tin thất bại');
+        }
+
+        return redirect()->back()->with('message','Cập nhật thông tin thành công');
     }
 }

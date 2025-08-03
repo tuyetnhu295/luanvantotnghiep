@@ -19,8 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 // fontend
 Route::prefix('home')->group(function () {
-    Route::get('/', [HomeController::class, 'index']);
+    Route::match(['get', 'post'], '/', [HomeController::class, 'index']);
     Route::post('/search', [HomeController::class, 'search']);
+    Route::post('/products/favorite/{product}', [HomeController::class, 'favorite']);
 
     // danh muc san pham trang chu
     Route::get('/pages/all-product', [HomeController::class, 'all_product']);
@@ -133,6 +134,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/register/add-employee', [AdminController::class, 'add']);
     Route::post('/dashboard', [AdminController::class, 'dashboard']);
     Route::get('/info', [AdminController::class, 'info']);
+    Route::post('/edit-info/{id}', [AdminController::class, 'save']);
 });
 
 //cho phép toàn bộ roles truy cập

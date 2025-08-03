@@ -14,12 +14,12 @@ class FavoriteController extends Controller
         $customer_id = Session::get('customer_id');
 
         if (! $customer_id) {
-            return Redirect('/home/account/login')->with('error', 'Yêu cầu đăng nhập tài khoản');
+            return Redirect()->back()->with('error', 'Yêu cầu đăng nhập tài khoản');
         }
 
         $product_id = Product::find($product);
         if (! $product_id) {
-            abort(404);
+            return Redirect()->back()->with('error', 'Sản phẩm không tồn tại');
         }
 
         $tontai = DB::table('tbl_favorite_products')
