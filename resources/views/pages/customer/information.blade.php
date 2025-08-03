@@ -59,6 +59,11 @@
                         📦 Đơn hàng của tôi
                     </a>
 
+                    <a href="{{ URL::to('/home/account/info/coupons') }}"
+                        class="nav-link {{ request()->is('home/account/info/coupons') ? 'active' : '' }}">
+                        🎟️ Mã giảm giá
+                    </a>
+
                     <a href="{{ URL::to('/home/account/info/help') }}"
                         class="nav-link {{ request()->is('home/account/info/help') ? 'active' : '' }}">❓ Yêu cầu hỗ
                         trợ</a>

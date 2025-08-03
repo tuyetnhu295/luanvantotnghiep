@@ -18,7 +18,8 @@
     <link rel="stylesheet" href="{{ asset('fontend/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('fontend/css/sweetalert.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet'
+        href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
 </head>
 
 <body>
@@ -27,7 +28,7 @@
     </div>
 
     <div class="top-bar">
-        <div class="marquee">
+        {{-- <div class="marquee">
             @foreach ($coupon as $value)
                 @if ($value->discount_type == 'fixed')
                     <span>
@@ -41,15 +42,15 @@
                     </span>
                 @endif
             @endforeach
-        </div>
+        </div> --}}
     </div>
 
     <!-- Header - Container chính -->
     <nav class="header-main">
         <div class="container d-flex align-items-center justify-content-between">
             <!-- Logo -->
-            <a href="{{ URL::to('/home') }}"><img src="{{ asset('fontend/images/logo.png') }}" alt="Logo" height="60" width="100"
-                    style="margin-right:20px;"></a>
+            <a href="{{ URL::to('/home') }}"><img src="{{ asset('fontend/images/logo.png') }}" alt="Logo"
+                    height="60" width="100" style="margin-right:20px;"></a>
 
             <!-- Thanh tìm kiếm -->
             <form class="search-box d-flex" action="{{ URL::to('/home/search') }}" method="post">
@@ -64,15 +65,16 @@
 
             </form>
 
-            @if (Session::has('success'))
+            @if (Session::has('success') || Session::has('error'))
                 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055">
-                    <div class="toast align-items-center text-white bg-success border-0 show shadow" role="alert">
+                    <div class="toast align-items-center text-white {{ Session::has('message') ? 'bg-success' : 'bg-danger' }} border-0 shadow"
+                        role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="d-flex">
                             <div class="toast-body">
-                                {{ Session::get('success') }}
+                                {{ Session::get('success') ?? Session::get('error') }}
                             </div>
                             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                                aria-label="Đóng"></button>
+                                aria-label="Close"></button>
                         </div>
                     </div>
                 </div>
@@ -80,9 +82,10 @@
                     document.addEventListener('DOMContentLoaded', function() {
                         const toastEl = document.querySelector('.toast');
                         if (toastEl) {
-                            new bootstrap.Toast(toastEl, {
-                                delay: 10000
-                            }).show();
+                            const toast = new bootstrap.Toast(toastEl, {
+                                delay: 5000
+                            });
+                            toast.show();
                         }
                     });
                 </script>
@@ -90,22 +93,6 @@
 
             <!-- Biểu tượng cửa hàng, đăng nhập, giỏ hàng -->
             <div class="header-icons d-flex align-items-center">
-                <div class="dropdown">
-                    <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#"
-                        id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-globe me-1"></i> Ngôn ngữ
-                    </a>
-
-                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                        <li>
-                            <a class="dropdown-item" style="color: black" href="?lang=vi">🇻🇳 Tiếng Việt</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" style="color: black" href="?lang=en">🇺🇸 English</a>
-                        </li>
-                    </ul>
-                </div>
-
                 @if (session('customer_id'))
                     <div class="dropdown">
                         <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#"
@@ -134,6 +121,8 @@
                     </a>
                 @endif
                 <a href="{{ URL::to('/home/pages/cart/cart') }}"><i class="bi bi-cart"></i> Giỏ hàng</a>
+                <a href="{{ URL::to('/home/account/info/favorite-product') }}"><i class="bi bi-heart"></i> Yêu
+                    thích</a>
             </div>
         </div>
     </nav>
@@ -200,8 +189,8 @@
                         </ul>
                     </li>
 
-                    {{-- <li class="nav-item"><a class="nav-link" href="">GIÁ MỚI</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">TIN THỜI TRANG</a></li> --}}
+                    {{-- <li class="nav-item"><a class="nav-link" href="">GIÁ MỚI</a></li> --}}
+                    {{-- <li class="nav-item"><a class="nav-link" href="">MÃ KHUYẾN MÃI</a></li> --}}
                 </ul>
             </div>
         </div>
@@ -310,8 +299,10 @@
 
                 <div class="col-md-3 mb-3">
                     <h6 class="fw-semibold">Thanh toán</h6>
-                    <img src="https://cdn.brandfetch.io/idV02t6WJs/w/820/h/249/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1750645747861" width="90" class="me-2">
-                    <img src="https://cdn.brandfetch.io/idQhfAEHMK/w/432/h/175/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1745929332351" width="90">
+                    <img src="https://cdn.brandfetch.io/idV02t6WJs/w/820/h/249/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1750645747861"
+                        width="90" class="me-2">
+                    <img src="https://cdn.brandfetch.io/idQhfAEHMK/w/432/h/175/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1745929332351"
+                        width="90">
                 </div>
 
                 <div class="col-md-3 mb-3">

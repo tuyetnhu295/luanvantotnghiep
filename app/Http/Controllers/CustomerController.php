@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\FavoriteProduct;
 use App\Models\Order;
+use App\Models\Coupon;
+use App\Models\UsageModel;
 use App\Models\ReturnItem;
 use App\Models\ReturnModel;
 use Illuminate\Http\Request;
@@ -25,6 +28,7 @@ class CustomerController extends Controller
         $cate_product    = DB::table('tbl_category_product')->orderBy('category_product_id', 'desc')->get();
         $brand_product   = DB::table('tbl_brand_product')->orderBy('brand_product_id', 'desc')->get();
         $subcate_product = DB::table('tbl_subcategory_product')->orderBy('subcategory_product_id', 'desc')->get();
+
         return view('pages.login.register', [
             'category'    => $cate_product,
             'brand'       => $brand_product,
@@ -479,7 +483,7 @@ class CustomerController extends Controller
 
         $customer_id = Session::get('customer_id');
         if (! $customer_id) {
-            abort(404);
+            return redirect()->back()->with('error', 'Yêu cầu đăng nhập tài khoản');
         }
         $favorite = FavoriteProduct::join('tbl_product', 'tbl_product.product_id', '=', 'tbl_favorite_products.product_id')
             ->where('tbl_favorite_products.customer_id', $customer_id)
@@ -560,6 +564,34 @@ class CustomerController extends Controller
 
         return Redirect()->back()->with('message', 'Bỏ yêu thích sản phẩm thành công');
     }
+
+    public function coupons()
+    {
+        $cate_product    = DB::table('tbl_category_product')->orderBy('category_product_id', 'desc')->get();
+        $brand_product   = DB::table('tbl_brand_product')->orderBy('brand_product_id', 'desc')->get();
+        $subcate_product = DB::table('tbl_subcategory_product')->orderBy('subcategory_product_id', 'desc')->get();
+
+        $customer = Session::get('customer_id');
+        $usage = UsageModel::where('customer_id', $customer)
+            ->pluck('coupon_id')
+            ->toArray();
+
+        $order = Order::where('customer_id', $customer)->orderBy('created_at', 'desc')->get();
+        $coupons = Coupon::join('tbl_coupon_usage', 'tbl_coupon_usage.coupon_id', '=', 'tbl_discount_coupon.coupon_id')
+            ->whereNotIn('tbl_coupon_usage.coupon_id', $usage)
+            ->orderBy('tbl_discount_coupon.created_at', 'desc')->paginate(8);
+
+        return view('pages.customer.coupon')
+            ->with('category', $cate_product)
+            ->with('brand', $brand_product)
+            ->with('subcategory', $subcate_product)
+            ->with('order', $order)
+            ->with('coupons', $coupons);
+    }
+
+
+
+
     //Admin
 
     public function AuthLogin()

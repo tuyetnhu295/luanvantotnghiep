@@ -93,6 +93,7 @@ Route::prefix('home')->group(function () {
     Route::get('/account/info/profile', [CustomerController::class, 'info']);
     Route::get('/account/info/change-password', [CustomerController::class, 'change_password']);
     Route::get('/account/info/my-order', [CustomerController::class, 'my_order']);
+    Route::get('/account/info/coupons', [CustomerController::class, 'coupons']);
     Route::get('/account/info/favorite-product', [CustomerController::class, 'favorite_product']);
     Route::post('/account/info/save-change-password', [CustomerController::class, 'save_change_password']);
     Route::post('/account/info/save-info', [CustomerController::class, 'save_info']);
