@@ -148,11 +148,11 @@
             @endforeach
             <h5 class="mt-4">Mã giảm giá</h5>
             <div class="border-top border-bottom py-3">
-                @if (Session::has('cart_coupon'))
+                @if (Session::has('coupon'))
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <span class="badge bg-success text-uppercase">
-                                {{ Session::get('cart_coupon')['code'] ?? Session::get('cart_coupon') }}
+                                {{ Session::get('coupon')['code'] ?? Session::get('coupon') }}
                             </span>
                             <small class="text-muted ms-2">
                                 Áp dụng thành công
@@ -160,10 +160,10 @@
                         </div>
                         <button id="delete-coupon" class="btn btn-sm btn-outline-danger">Xoá</button>
                     </div>
-                    @if (Session::get('cart_coupon')['discount'] ?? false)
+                    @if (Session::get('coupon')['discount'] ?? false)
                         <div class="mt-2 text-muted">
                             Giảm:
-                            {{ Session::get('cart_coupon')['discount'] }}{{ Session::get('cart_coupon')['discount_type'] == 'percentage' ? '%' : '₫' }}
+                            {{ Session::get('coupon')['discount'] }}{{ Session::get('coupon')['discount_type'] == 'percentage' ? '%' : '₫' }}
                         </div>
                     @endif
                 @else
@@ -177,7 +177,7 @@
                 @php
                     $subtotal = Cart::subtotal(0, ',', '');
                     $subtotal = (float) str_replace(',', '', $subtotal);
-                    $coupon = Session::get('cart_coupon');
+                    $coupon = Session::get('coupon');
                     $count = Cart::count();
                     $total_discount = 0;
                     $total_coupon = 0;

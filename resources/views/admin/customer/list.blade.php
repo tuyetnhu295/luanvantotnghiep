@@ -22,6 +22,10 @@
                         <th scope="col">Số điện thoại</th>
                         <th scope="col">Ngày sinh</th>
                         <th scope="col">Giới tính</th>
+                        <th scope="col">Số nhà</th>
+                        <th scope="col">Xã/Phường</th>
+                        <th scope="col">Quận/Huyện</th>
+                        <th scope="col">Tỉnh/Thành phố</th>
                         <th scope="col">Yêu cầu xóa</th>
                         <th scope="col">Ngày tạo</th>
                         <th scope="col">Hành động</th>
@@ -43,6 +47,10 @@
                                     Nam
                                 @endif
                             </td>
+                            <td>{{ $value->address }}</td>
+                            <td>{{ $value->ward }}</td>
+                            <td>{{ $value->district }}</td>
+                            <td>{{ $value->city}}</td>
                             <td style="text-align: center;">
                                 @if ($value->delete_request == 0)
                                     <span>✅</span>

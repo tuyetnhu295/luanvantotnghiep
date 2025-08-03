@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\UsageModel;
 use App\Models\OrderDetails;
 use App\Models\Product;
 use App\Models\Variant;
@@ -40,7 +42,7 @@ class CheckoutController extends Controller
             'subcategory' => $subcate_product,
         ]);
     }
-    public function checkout()
+    public function checkout(Request $request)
     {
 
         $cate_product    = DB::table('tbl_category_product')->orderBy('category_product_id', 'desc')->get();
@@ -69,63 +71,32 @@ class CheckoutController extends Controller
         Session::put('shipping_note', $request->shipping_note);
         Session::put('shipping_method', $request->shipping_method);
         Session::put('total', $request->total);
+        Session::put('total_coupon', $request->total_coupon);
         return Redirect::to('/home/payment');
     }
 
     public function save_note_coupon(Request $request)
     {
-        $couponCode   = trim($request->coupon_code);
         $shippingNote = trim($request->shipping_note);
 
-        // Lưu ghi chú nếu có
-        if (! empty($shippingNote)) {
-            Session::put('cart_note', $shippingNote);
-        }
-
-        // Nếu không nhập mã thì chỉ lưu note và tiếp tục
-        if (empty($couponCode)) {
-            return redirect('/home/checkouts');
-        }
-
-        // Kiểm tra mã giảm giá trong DB
-        $coupon = DB::table('tbl_discount_coupon')
-            ->whereRaw('UPPER(coupon_code) = ?', [$couponCode])
-            ->first();
-        if (! $coupon) {
-            return redirect('/home/pages/cart/cart')->with('error_coupon', 'Mã khuyến mãi không hợp lệ. Vui lòng thử lại.');
-        }
-
-        if ($coupon->used_count >= $coupon->usage_limit) {
-            return redirect()->back()->with('error_coupon', 'Mã giảm giá đã hết lượt sử dụng');
-        }
-
-        // Kiểm tra nếu đã áp dụng mã này rồi
-        if (Session::has('cart_coupon') && Session::get('cart_coupon') === $couponCode) {
-            return redirect()->back()->with('error_coupon', 'Mã giảm giá này đã được áp dụng.');
-        }
-        if ($coupon->end_date < now() && $coupon->end_date) {
-            return redirect()->back()->with('error_coupon', 'Mã giảm giá này quá hạn sử dụng.');
-        }
-        // Lưu mã vào session nếu hợp lệ
-        Session::put('cart_coupon', [
-            'id'            => $coupon->coupon_id,
-            'code'          => $coupon->coupon_code,
-            'discount_type' => $coupon->discount_type,
-            'discount'      => $coupon->discount_value, // số tiền giảm
-        ]);
-
-        return redirect('/home/checkouts')->with('message', 'Mã giảm giá đã được áp dụng');
+        Session::put('cart_note', $shippingNote);
+        return redirect('/home/checkouts');
     }
 
     // Route: /home/checkouts/apply-coupon
     public function apply_coupon(Request $request)
     {
         $code = trim($request->coupon_code);
-
+        $customer = Session::get('customer_id');
+        $total = $request->total;
         // Tìm mã giảm giá
         $coupon = DB::table('tbl_discount_coupon')
             ->whereRaw('UPPER(coupon_code) = ?', [$code])
             ->first();
+        $usage = UsageModel::where('customer_id', $customer)
+            ->pluck('coupon_id')
+            ->toArray();
+
         // Nếu không tìm thấy
         if (! $coupon) {
             return redirect('/home/checkouts')->with('error_coupon', 'Mã khuyến mãi không hợp lệ. Vui lòng thử lại.');
@@ -144,7 +115,12 @@ class CheckoutController extends Controller
         if ($coupon->end_date < now() && $coupon->end_date) {
             return redirect()->back()->with('error_coupon', 'Mã giảm giá này quá hạn sử dụng.');
         }
-
+        if ($usage) {
+            return redirect()->back()->with('error_coupon', 'Mã giảm giá này đã được sử dụng.');
+        }
+        if ($coupon->min_order_value > $total) {
+            return redirect()->back()->with('error_coupon', 'Chưa đạt yêu cầu mã giảm giá');
+        }
         // Lưu mã vào session
         Session::put('coupon', [
             'id'            => $coupon->coupon_id,

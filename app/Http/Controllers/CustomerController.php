@@ -609,6 +609,15 @@ class CustomerController extends Controller
         $this->AuthLogin();
         $customer = Customer::all();
 
+        $cities    = json_decode(file_get_contents(public_path('data/tinh_tp.json')), true);
+        $districts = json_decode(file_get_contents(public_path('data/quan_huyen.json')), true);
+        $wards     = json_decode(file_get_contents(public_path('data/xa_phuong.json')), true);
+
+        foreach ($customer as $customers) {
+            $customers->ward    = $this->findNameByCode($wards, $customers->ward);
+            $customers->district = $this->findNameByCode($districts, $customers->district);
+            $customers->city    = $this->findNameByCode($cities, $customers->city);
+        }
         return view('admin.customer.list')
             ->with('customer', $customer);
     }

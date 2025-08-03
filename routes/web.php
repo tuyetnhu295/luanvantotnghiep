@@ -24,30 +24,30 @@ Route::prefix('home')->group(function () {
     Route::post('/products/favorite/{product}', [HomeController::class, 'favorite']);
 
     // danh muc san pham trang chu
-    Route::get('/pages/all-product', [HomeController::class, 'all_product']);
-    Route::get('/pages/all-product/filter', [HomeController::class, 'filter']);
+    Route::match(['get', 'post'],'/pages/all-product', [HomeController::class, 'all_product']);
+    Route::match(['get', 'post'],'/pages/all-product/filter', [HomeController::class, 'filter']);
     Route::get('/pages/all-product/load-more-products', [HomeController::class, 'loadMoreProducts']);
 
-    Route::get('/pages/best-selling', [HomeController::class, 'best_selling']);
-    Route::get('/pages/best-selling/filter', [HomeController::class, 'best_selling_filter']);
+    Route::match(['get', 'post'],'/pages/best-selling', [HomeController::class, 'best_selling']);
+    Route::match(['get', 'post'],'/pages/best-selling/filter', [HomeController::class, 'best_selling_filter']);
 
-    Route::get('/pages/new-products', [HomeController::class, 'new_product']);
-    Route::get('/pages/new-products/filter', [HomeController::class, 'new_product_filter']);
+    Route::match(['get', 'post'],'/pages/new-products', [HomeController::class, 'new_product']);
+    Route::match(['get', 'post'],'/pages/new-products/filter', [HomeController::class, 'new_product_filter']);
 
-    Route::get('/pages/category/category-product/{slug}', [CategoryProduct::class, 'category_product']);
-    Route::get('/pages/category/category-product/{slug}/filter', [CategoryProduct::class, 'filter']);
+    Route::match(['get', 'post'],'/pages/category/category-product/{slug}', [CategoryProduct::class, 'category_product']);
+    Route::match(['get', 'post'],'/pages/category/category-product/{slug}/filter', [CategoryProduct::class, 'filter']);
 
-    Route::get('/pages/brand/brand-product/{slug}', [BrandProduct::class, 'brand_product']);
-    Route::get('/pages/brand/brand-product/{slug}/filter', [BrandProduct::class, 'filter']);
+    Route::match(['get', 'post'],'/pages/brand/brand-product/{slug}', [BrandProduct::class, 'brand_product']);
+    Route::match(['get', 'post'],'/pages/brand/brand-product/{slug}/filter', [BrandProduct::class, 'filter']);
 
-    Route::get('/pages/subcategory/subcategory-product/{slug}', [SubcategoryProduct::class, 'subcategory_product']);
-    Route::get('/pages/subcategory/subcategory-product/{slug}/filter', [SubcategoryProduct::class, 'filter']);
+    Route::match(['get', 'post'],'/pages/subcategory/subcategory-product/{slug}', [SubcategoryProduct::class, 'subcategory_product']);
+    Route::match(['get', 'post'],'/pages/subcategory/subcategory-product/{slug}/filter', [SubcategoryProduct::class, 'filter']);
 
-    Route::get('/pages/product/detail-product/{slug}', [ProductController::class, 'detail_product']);
+    Route::match(['get', 'post'],'/pages/product/detail-product/{slug}', [ProductController::class, 'detail_product']);
 
     //Gio hang
     Route::post('/pages/cart/save-cart', [CartController::class, 'save_cart']);
-    Route::get('/pages/cart/cart', [CartController::class, 'show_cart']);
+    Route::match(['get', 'post'],'/pages/cart/cart', [CartController::class, 'show_cart']);
     Route::get('/pages/cart/delete-cart/{rowId}', [CartController::class, 'delete_cart']);
     Route::post('/pages/cart/update-cart', [CartController::class, 'update_cart']);
 

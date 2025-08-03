@@ -268,6 +268,7 @@
                             $total_coupon = $coupon['discount'];
                         }
                     }
+
                     if ($count > 5) {
                         $total_discount = $subtotal * 0.1;
                     }
@@ -309,7 +310,8 @@
                     <p><strong>Tổng cộng: <span
                                 style="font-size: 18px; color: red;">{{ number_format($total, 0, ',', '.') }}₫</span></strong>
                     </p>
-                    <input type="hidden" name="total" value="{{ $total }}"">
+                    <input type="hidden" name="total" value="{{ $total }}">
+                    <input type="hidden" name="total_coupon" value="{{ $total_coupon }}"">
                 </div>
             </div>
 

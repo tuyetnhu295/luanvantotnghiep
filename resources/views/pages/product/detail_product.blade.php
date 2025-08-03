@@ -361,7 +361,7 @@
 
                                                 <!-- Nút overlay -->
                                                 <div class="button-overlay d-flex gap-2">
-                                                    <form action="" method="POST">
+                                                    <form action="{{ url('/home/products/favorite/' . $product->slug_product) }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="product_id"
                                                             value="{{ $related->product_id }}">

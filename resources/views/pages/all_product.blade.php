@@ -42,7 +42,6 @@
                                         alt="{{ $product->product_name }}" class="w-100"
                                         style="height: 220px; object-fit: cover;">
 
-                                    <!-- Nút thêm giỏ + yêu thích -->
                                     <div class="button-overlay d-flex gap-2">
                                         <form action="{{ url('/home/products/favorite/' . $product->slug_product) }}" method="POST">
                                             @csrf

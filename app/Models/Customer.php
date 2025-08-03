@@ -20,6 +20,10 @@ class Customer extends Model
         'customer_phone',
         'customer_password',
         'customer_birthday',
-        'customer_sex'
+        'customer_sex',
+        'address',
+        'ward',
+        'district',
+        'city'
     ];
 }

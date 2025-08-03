@@ -67,7 +67,7 @@
 
             @if (Session::has('success') || Session::has('error'))
                 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055">
-                    <div class="toast align-items-center text-white {{ Session::has('message') ? 'bg-success' : 'bg-danger' }} border-0 shadow"
+                    <div class="toast align-items-center text-white {{ Session::has('success') ? 'bg-success' : 'bg-danger' }} border-0 shadow"
                         role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="d-flex">
                             <div class="toast-body">

@@ -118,6 +118,7 @@
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Tổng tiền</span>
                         <strong>{{ number_format($total, 0, ',', '.') }}₫</strong>
+                        <input type="hidden" vale="{{ $total }}" name="total">
                     </li>
                 </ul>
 
@@ -145,14 +146,6 @@
                     @csrf
                     <div class="mb-3">
                         <input type="text" class="form-control mb-2" placeholder="Ghi chú" name="shipping_note">
-                        @if (session('error_coupon'))
-                            <div
-                                style="color: red; margin-bottom: 10px; background-color: rgb(226, 189, 189); height:40px;align-content: center;">
-                                {{ session('error_coupon') }}
-                            </div>
-                        @endif
-                        <input type="text" class="form-control"
-                            placeholder="Nhập mã khuyến mãi (nếu có)"name="coupon_code">
                     </div>
                     @if (session('customer_id'))
                         <button type="submit" class="btn btn-checkout">THANH TOÁN NGAY</button>
@@ -188,20 +181,10 @@
 
                                                     <!-- Nút overlay -->
                                                     <div class="button-overlay d-flex gap-2">
-                                                        <form action="" method="POST">
+                                                        <form action="{{ url('/home/products/favorite/' . $related->slug_product) }}" method="POST">
                                                             @csrf
                                                             <input type="hidden" name="product_id"
-                                                                value="{{ $related->product_id }}">
-                                                            <button type="submit"
-                                                                class="btn btn-dark rounded-circle d-flex align-items-center justify-content-center"
-                                                                style="width: 40px; height: 40px;">
-                                                                <i class="bi bi-cart"></i>
-                                                            </button>
-                                                        </form>
-                                                        <form action="" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="product_id"
-                                                                value="{{ $related->product_id }}">
+                                                                value="{{ $related->slug_product }}">
                                                             <button type="submit"
                                                                 class="btn btn-danger rounded-circle d-flex align-items-center justify-content-center"
                                                                 style="width: 40px; height: 40px;">

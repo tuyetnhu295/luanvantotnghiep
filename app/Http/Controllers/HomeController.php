@@ -346,6 +346,6 @@ class HomeController extends Controller
         $data['product_id']  = $products->product_id;
         DB::table('tbl_favorite_products')->insert($data);
 
-        return Redirect()->back()->with('message', 'Yêu thích thành công');
+        return Redirect()->back()->with('success', 'Yêu thích thành công');
     }
 }
